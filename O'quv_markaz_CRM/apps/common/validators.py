@@ -8,10 +8,6 @@ uz_phone_validator = RegexValidator(
 
 
 def branch_for_user(user, branch):
-    """
-    Yozuv qaysi filialga tegishli bo'lishini aniqlaydi: Admin filialni o'zi tanlaydi,
-    qolgan xodimlar faqat o'z filialida ishlaydi (filial yuborilmasa — o'z filiali olinadi).
-    """
     if user.is_admin:
         if branch is None:
             raise serializers.ValidationError({"branch": "Filialni tanlash majburiy."})
