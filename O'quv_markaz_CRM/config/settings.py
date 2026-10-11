@@ -45,9 +45,6 @@ INSTALLED_APPS = [
     "apps.teachers",
     "apps.students",
     "apps.groups",
-    "apps.payments",
-    "apps.attendance",
-    "apps.dashboard",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
