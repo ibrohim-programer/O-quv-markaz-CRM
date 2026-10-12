@@ -10,7 +10,6 @@ from .models import Student
 
 
 class StudentSerializer(serializers.ModelSerializer):
-    # Admin filialni tanlaydi; boshqa xodimlarda filial avtomatik — o'z filiali.
     branch = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all(), required=False)
 
     class Meta:
@@ -58,8 +57,6 @@ class StudentSerializer(serializers.ModelSerializer):
 
 
 class StudentShortSerializer(serializers.ModelSerializer):
-    """Boshqa obyektlar ichida o'quvchini qisqa ko'rsatish uchun: {id, full_name, phone}."""
-
     class Meta:
         model = Student
         fields = ["id", "full_name", "phone"]

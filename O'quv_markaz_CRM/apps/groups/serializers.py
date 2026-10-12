@@ -16,7 +16,6 @@ from .services import enroll_student, update_enrollment
 
 
 class GroupSerializer(serializers.ModelSerializer):
-    # Admin filialni tanlaydi; boshqa xodimlarda filial avtomatik — o'z filiali.
     branch = serializers.PrimaryKeyRelatedField(queryset=Branch.objects.all(), required=False)
     course = serializers.PrimaryKeyRelatedField(queryset=Course.objects.all())
     teacher = serializers.PrimaryKeyRelatedField(queryset=Teacher.objects.select_related("user"))
@@ -46,8 +45,6 @@ class GroupSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "created_at"]
-        # Nomning filial ichida unikalligi validate() da tekshiriladi: non-admin filialni yubormaydi,
-        # DRF'ning avtomatik UniqueTogetherValidator'i esa uni majburiy qilib qo'yardi.
         validators = []
 
     def get_active_students_count(self, group) -> int:
@@ -64,7 +61,6 @@ class GroupSerializer(serializers.ModelSerializer):
         return value
 
     def validate_lesson_days(self, value):
-        # [4, 0, 2, 2] -> [0, 2, 4]: takrorsiz va hafta tartibida saqlanadi.
         return sorted(set(value))
 
     def validate_max_students(self, value):
@@ -140,7 +136,6 @@ class GroupShortSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentSerializer(serializers.ModelSerializer):
-    """Ko'rish va guruhga biriktirish (POST: student, group). Kontrakt — kursning hozirgi narxi."""
 
     student = BranchScopedPrimaryKeyRelatedField(
         queryset=Student.objects.all(), error_messages={"does_not_exist": "Bunday o'quvchi mavjud emas."}
@@ -165,8 +160,6 @@ class EnrollmentSerializer(serializers.ModelSerializer):
             "created_at",
         ]
         read_only_fields = ["id", "contract_amount", "paid_amount", "status", "created_at"]
-        # (student, group) juftligini servis tekshiradi: guruhdan chiqqan o'quvchi qaytsa, eski a'zolik
-        # faollashadi. DRF'ning avtomatik UniqueTogetherValidator'i buni xato deb rad etardi.
         validators = []
 
     def create(self, validated_data):
@@ -180,7 +173,6 @@ class EnrollmentSerializer(serializers.ModelSerializer):
 
 
 class EnrollmentUpdateSerializer(serializers.ModelSerializer):
-    """Guruhdan chiqarish (status=left) va kontraktni o'zgartirish. Javob — to'liq a'zolik."""
 
     class Meta:
         model = Enrollment
@@ -188,7 +180,6 @@ class EnrollmentUpdateSerializer(serializers.ModelSerializer):
 
     def validate_status(self, value):
         if value == Enrollment.Status.ACTIVE and self.instance.status != Enrollment.Status.ACTIVE:
-            # Qaytishda joy, guruh va o'quvchi holati qayta tekshirilishi kerak — bu biriktirish servisida.
             raise serializers.ValidationError(
                 "Guruhga qaytarish uchun o'quvchini qayta biriktiring: POST /api/enrollments/."
             )

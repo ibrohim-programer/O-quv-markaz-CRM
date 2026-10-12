@@ -9,15 +9,7 @@ from .models import Enrollment, Group
 
 @transaction.atomic
 def enroll_student(student, group):
-    """
-    O'quvchini guruhga biriktiradi. Kontrakt — kursning hozirgi narxi, keyin o'zgarmaydi.
 
-    Guruh qatori qulflanadi (SELECT ... FOR UPDATE): oxirgi joyga bir vaqtda ikki so'rov kelsa,
-    ikkinchisi birinchisi tugashini kutadi, joylarni qaytadan sanaydi va "joy yo'q" oladi.
-    Oldin shu guruhdan chiqqan o'quvchining eski a'zoligi (kontrakti va to'lovlari bilan)
-    qayta faollashadi — yangi kontrakt ochilmaydi.
-    """
-    # of=("self",) — faqat guruh qatori qulflanadi; kurs qatori (shu kursning boshqa guruhlari) emas.
     group = Group.objects.select_for_update(of=("self",)).select_related("course").get(pk=group.pk)
 
     if student.branch_id != group.branch_id:
@@ -44,12 +36,7 @@ def enroll_student(student, group):
 
 @transaction.atomic
 def update_enrollment(enrollment, **changes):
-    """
-    Guruhdan chiqarish (status=left) yoki kontraktni o'zgartirish (chegirma, qarzni kechirish).
-
-    Qator qulflanadi va faqat o'zgargan maydonlar yoziladi: shu payt to'lov kiritilsa ham
-    paid_amount eski qiymat bilan ustidan yozilmaydi, kontrakt esa to'langan summadan kam bo'lmaydi.
-    """
+  
     enrollment = Enrollment.objects.select_for_update().get(pk=enrollment.pk)
 
     contract_amount = changes.get("contract_amount", enrollment.contract_amount)

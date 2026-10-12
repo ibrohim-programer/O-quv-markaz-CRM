@@ -2,20 +2,7 @@ from rest_framework.permissions import BasePermission
 
 
 class RolePermission(BasePermission):
-    """
-    Rolga qarab ruxsat beradi.
-
-    View ichida qaysi amalga qaysi rollar kira olishi yoziladi:
-
-        role_permissions = {
-            "list": [Role.ADMIN, Role.MANAGER],
-            "create": [Role.ADMIN],
-        }
-
-    ViewSet'da kalit — amal nomi (list, create, destroy...), oddiy APIView'da — HTTP metod
-    (get, post...). Lug'atda yo'q amal hech kimga ruxsat etilmaydi (xavfsiz default).
-    """
-
+   
     message = "Sizning rolingiz bu amalni bajara olmaydi."
 
     def has_permission(self, request, view):

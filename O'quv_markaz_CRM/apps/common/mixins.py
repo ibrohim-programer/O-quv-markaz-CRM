@@ -1,17 +1,5 @@
 class BranchScopedMixin:
-    """
-    Admin bo'lmagan xodimga faqat o'z filialidagi yozuvlarni ko'rsatadi.
 
-    `branch_field` — querysetdan filialgacha bo'lgan yo'l. Masalan:
-    Student uchun "branch", Payment uchun "enrollment__group__branch".
-
-    `teacher_field` — o'qituvchi uchun qo'shimcha cheklov: querysetdan o'qituvchining
-    User'igacha bo'lgan yo'l (Group uchun "teacher__user"). Berilsa, o'qituvchi filialning
-    hammasini emas, faqat o'ziga tegishli yozuvlarni ko'radi. Bitta yo'l bilan ifodalab
-    bo'lmaydigan holatda view `filter_for_teacher()` ni qayta yozadi.
-
-    Begona obyekt querysetda bo'lmagani uchun API 404 qaytaradi.
-    """
 
     branch_field = "branch"
     teacher_field = None

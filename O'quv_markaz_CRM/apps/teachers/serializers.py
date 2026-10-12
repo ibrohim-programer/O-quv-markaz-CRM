@@ -13,11 +13,6 @@ from .services import create_teacher, update_teacher
 
 
 class TeacherSerializer(serializers.ModelSerializer):
-    """
-    O'qituvchini ko'rish va tahrirlash (PATCH). Yaratish — TeacherCreateSerializer.
-    Ism, telefon, email va filial User'ga, mutaxassislik va status Teacher'ga yoziladi.
-    """
-
     username = serializers.CharField(source="user.username", read_only=True)
     first_name = serializers.CharField(source="user.first_name", max_length=150)
     last_name = serializers.CharField(source="user.last_name", max_length=150)
@@ -45,8 +40,6 @@ class TeacherSerializer(serializers.ModelSerializer):
         attrs = super().validate(attrs)
         branch = attrs.get("user", {}).get("branch")
         if self.instance is not None and branch is not None and branch != self.instance.user.branch:
-            # Aks holda o'qituvchi o'z guruhlarini ko'ra olmay qoladi (u faqat o'z filialini ko'radi).
-            # groups ilovasi import qilinmaydi — bog'liqlik bir tomonga: groups -> teachers.
             groups = self.instance.groups
             if groups.filter(status=groups.model.Status.ACTIVE).exists():
                 raise serializers.ValidationError(
@@ -65,7 +58,6 @@ class TeacherSerializer(serializers.ModelSerializer):
 
 
 class TeacherCreateSerializer(TeacherSerializer):
-    """O'qituvchi tizimga kirishi uchun unga login (username) va parol beriladi."""
 
     username = serializers.CharField(
         source="user.username",
@@ -95,8 +87,6 @@ class TeacherCreateSerializer(TeacherSerializer):
 
 
 class TeacherShortSerializer(serializers.ModelSerializer):
-    """Boshqa obyektlar ichida o'qituvchini qisqa ko'rsatish uchun: {id, full_name}."""
-
     full_name = serializers.CharField(source="user.get_full_name", read_only=True)
 
     class Meta:

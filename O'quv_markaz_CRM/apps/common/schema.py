@@ -54,11 +54,7 @@ ERROR_DESCRIPTIONS = {
 
 
 class CrmAutoSchema(AutoSchema):
-    """
-    Har bir endpointga u qaytarishi mumkin bo'lgan xato javoblarini qo'shadi (TZ 22-band: "Error
-    response"). Qaysi xato bo'lishi view'dan aniqlanadi — har view'ga qo'lda yozish shart emas.
-    """
-
+ 
     def _get_response_bodies(self, direction="response"):
         responses = super()._get_response_bodies(direction)
         for code in self._error_codes(responses):

@@ -77,11 +77,7 @@ class Group(models.Model):
 
 
 class Enrollment(models.Model):
-    """
-    O'quvchining guruhdagi a'zoligi va kontrakti. Kontrakt — guruhga qo'shilgan paytdagi
-    kurs narxi: keyin kurs narxi o'zgarsa ham, eski o'quvchilarning kontrakti o'zgarmaydi.
-    Qarz saqlanmaydi, so'rov paytida hisoblanadi: contract_amount - paid_amount.
-    """
+ 
 
     class Status(models.TextChoices):
         ACTIVE = "active", "Faol"

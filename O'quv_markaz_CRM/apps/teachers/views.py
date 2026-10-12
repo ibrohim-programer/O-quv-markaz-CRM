@@ -21,7 +21,6 @@ Role = User.Role
 )
 @extend_schema(tags=["Teachers"])
 class TeacherViewSet(BranchScopedMixin, viewsets.ModelViewSet):
-    """Guruh yoki davomat tarixi bor o'qituvchi o'chirilmaydi — status=inactive qilinadi."""
 
     queryset = Teacher.objects.select_related("user__branch")
     permission_classes = [RolePermission]
@@ -45,6 +44,4 @@ class TeacherViewSet(BranchScopedMixin, viewsets.ModelViewSet):
         return TeacherSerializer
 
     def perform_destroy(self, instance):
-        # Profil login akkauntisiz ma'nosiz: User o'chiriladi, Teacher u bilan CASCADE orqali ketadi.
-        # Guruhi bor o'qituvchida PROTECT ishlaydi — hech narsa o'chmaydi, API 409 qaytaradi.
         instance.user.delete()

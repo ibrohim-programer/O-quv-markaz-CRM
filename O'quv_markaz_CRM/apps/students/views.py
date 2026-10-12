@@ -40,8 +40,6 @@ class StudentViewSet(BranchScopedMixin, viewsets.ModelViewSet):
     ordering_fields = ["id", "first_name", "last_name", "created_at"]
 
     def filter_for_teacher(self, queryset, user):
-        # Faqat o'z guruhlarida hozir o'qiyotganlar. JOIN emas, Exists: ikkita guruhida
-        # o'qiyotgan o'quvchi ro'yxatda ikki marta chiqmaydi.
         in_own_group = Enrollment.objects.filter(
             student=OuterRef("pk"), group__teacher__user=user, status=Enrollment.Status.ACTIVE
         )

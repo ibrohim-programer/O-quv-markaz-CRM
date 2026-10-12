@@ -21,5 +21,4 @@ class EnrollmentAdmin(admin.ModelAdmin):
     readonly_fields = ["student", "group", "paid_amount"]
 
     def has_add_permission(self, request):
-        # Biriktirish faqat API orqali: joy, holat va filial tekshiruvlari hamda qulflash servisda.
         return False

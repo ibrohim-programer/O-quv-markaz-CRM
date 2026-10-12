@@ -27,7 +27,6 @@ class CourseSerializer(serializers.ModelSerializer):
 
 
 class CourseShortSerializer(serializers.ModelSerializer):
-    """Boshqa obyektlar ichida kursni qisqa ko'rsatish uchun: {id, name}."""
 
     class Meta:
         model = Course
